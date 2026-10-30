@@ -1,0 +1,43 @@
+name: CI
+
+# 触发条件：推送到 main 分支，或对 main 提 PR 时，自动运行
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    # 在最新版 Ubuntu 上跑（CI 用干净环境，保证可复现）
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 把仓库代码拉下来
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      # 2. 装 Python 3.12
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 3. 安装项目依赖（requirements.txt 里已包含 requests/pytest/playwright/pytest-html）
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      # 4. 安装 Playwright 的 Chromium 浏览器（含系统依赖）
+      #    --with-deps：连系统库一起装，否则 Ubuntu 上浏览器起不来
+      - name: 安装 Playwright 浏览器
+        run: playwright install --with-deps chromium
+
+      # 5. 运行全部测试（pytest 会读 pytest.ini，自动生成 report.html）
+      - name: 运行测试
+        run: pytest
+
+      # 6. 把生成的测试报告上传，方便在 Actions 页面下载查看
+      - name: 上传测试报告
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: report.html
