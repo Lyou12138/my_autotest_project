@@ -8,3 +8,5 @@ node_modules/
 playwright-report/
 screenshots/
 performance_report.html
+bing_diag.png
+*.lnk

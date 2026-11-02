@@ -2,6 +2,7 @@
 pytest 全局配置
 所有 fixture 定义在这里，同目录及子目录下的用例自动可见
 """
+import os
 import pytest
 from api.client import BaseClient
 from api.user_api import UserAPI
@@ -95,11 +96,29 @@ def browser():
 
 
 @pytest.fixture
-def page(browser):
+def page(browser, request):
     """
     每个用例【各自开一个新页面】（默认 function 级别），用例之间互不干扰
     用例函数参数里写 page，pytest 会自动注入；用例跑完自动关页面
+    新增：如果这个用例【失败了】，自动把当前页面截图保存到 screenshots/ 目录
     """
     pg = browser.new_page()
     yield pg
+    # request.node 记录当前用例的运行状态；rep_call.failed 为 True 表示用例失败
+    if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
+        os.makedirs("screenshots", exist_ok=True)
+        pg.screenshot(path=f"screenshots/{request.node.name}.png")
     pg.close()
+
+
+# ---------- pytest 钩子：记录每个用例的执行结果 ----------
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    """
+    这个钩子会在每个用例跑完后被 pytest 调用。
+    作用：把"这个用例是失败还是通过"记到 item 上，
+    这样上面的 page fixture 才能在 yield 之后判断 rep_call.failed
+    """
+    outcome = yield
+    rep = outcome.get_result()
+    setattr(item, "rep_" + rep.when, rep)

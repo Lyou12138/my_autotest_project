@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <title>自动化练习页</title>
+</head>
+<body>
+  <h1>自动化练习页</h1>
+  <p>这是一个本地练习页面，用来练 UI 自动化的：定位、输入、点击、断言。</p>
+
+  <!-- 输入框：id = search_box -->
+  <input id="search_box" placeholder="输入关键词">
+
+  <!-- 按钮：id = search_btn，点击后把结果写到下面 -->
+  <button id="search_btn"
+          onclick="document.getElementById('result').textContent = '搜索结果：' + document.getElementById('search_box').value">
+    搜索
+  </button>
+
+  <!-- 结果显示区：id = result -->
+  <div id="result">等待输入</div>
+</body>
+</html>
