@@ -6,3 +6,5 @@ report.html
 venv/
 node_modules/
 playwright-report/
+screenshots/
+performance_report.html
