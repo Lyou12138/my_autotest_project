@@ -33,7 +33,7 @@ jobs:
 
       # 5. 运行全部测试（pytest 会读 pytest.ini，自动生成 report.html）
       - name: 运行测试
-        run: pytest
+        run: pytest -m "not external"
 
       # 6. 把生成的测试报告上传，方便在 Actions 页面下载查看
       - name: 上传测试报告

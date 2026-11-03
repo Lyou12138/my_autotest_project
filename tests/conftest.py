@@ -3,6 +3,7 @@ pytest 全局配置
 所有 fixture 定义在这里，同目录及子目录下的用例自动可见
 """
 import os
+from pathlib import Path
 import pytest
 from api.client import BaseClient
 from api.user_api import UserAPI
@@ -80,6 +81,20 @@ def sample_post():
         "title": "测试帖子",
         "body": "这是一个自动化测试创建的帖子",
     }
+
+
+# ---------- 练习页地址（动态路径，本机/CI 通用） ----------
+@pytest.fixture
+def practice_url():
+    """
+    本地练习页地址。
+    用 pathlib 基于【当前文件位置】动态算出 file:// URL：
+    - 本机 Windows：C:/.../my_autotest_project/tests/practice_page.html
+    - CI Linux：/home/runner/.../tests/practice_page.html
+    两个位置都能定位到同一个 practice_page.html，绝不会因为写死路径而在另一台机器找不到。
+    这也解释了为什么之前 CI 报 net::ERR_FILE_NOT_FOUND——那是硬编码的 Windows 绝对路径。
+    """
+    return (Path(__file__).resolve().parent / "practice_page.html").as_uri()
 
 
 # ---------- UI 自动化 fixture（Playwright） ----------

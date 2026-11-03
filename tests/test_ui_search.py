@@ -1,6 +1,9 @@
-from playwright.sync_api import expect
+import pytest
 import re
+from playwright.sync_api import expect
 
+
+@pytest.mark.external
 def test_bing_search_software_testing(page):
     """UI 用例1：在必应搜索"软件测试"，断言结果页标题包含关键词"""
     # ---- Arrange（准备）：启动浏览器，打开必应 ----
@@ -14,6 +17,7 @@ def test_bing_search_software_testing(page):
         # ---- Assert（断言）：结果页标题包含关键词 ----
     expect(page).to_have_title(re.compile("软件测试"))
 
+@pytest.mark.external
 def test_bing_Search_playwright(page):
     page.goto("http://www.bing.com")
 

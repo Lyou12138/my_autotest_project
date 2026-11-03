@@ -1,7 +1,8 @@
 import pytest
+from pathlib import Path
 from playwright.sync_api import expect
 
-PRACTICE_URL = "file:///C:/Users/myages2026/WorkBuddy/2026-10-17-14-39-35/outputs/my_autotest_project/tests/practice_page.html"
+PRACTICE_URL = (Path(__file__).resolve().parent / "practice_page.html").as_uri()
 
 @pytest.mark.smoke
 @pytest.mark.parametrize("key",[("性能测试"),("回归测试")])

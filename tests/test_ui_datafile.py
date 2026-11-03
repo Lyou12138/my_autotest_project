@@ -1,11 +1,12 @@
 """数据文件驱动示例：测试数据放在 CSV 文件里，代码从文件读，改数据不用改代码"""
 import csv
 import os
+from pathlib import Path
 import pytest
 from playwright.sync_api import expect
 
-# 本地练习页地址
-PRACTICE_URL = "file:///C:/Users/myages2026/WorkBuddy/2026-10-17-14-39-35/outputs/my_autotest_project/tests/practice_page.html"
+# 本地练习页地址（动态：本机/CI 通用）
+PRACTICE_URL = (Path(__file__).resolve().parent / "practice_page.html").as_uri()
 
 # 数据文件路径：__file__ 是当前文件，../data/search_data.csv 相对它定位（不管在哪运行都对）
 DATA_FILE = os.path.join(os.path.dirname(__file__), "..", "data", "search_data.csv")
