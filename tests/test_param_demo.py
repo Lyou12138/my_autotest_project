@@ -24,7 +24,8 @@ import requests
 
 @pytest.mark.parametrize("user_id,expected_name",[ (1, "Leanne Graham"),
     (2, "Ervin Howell"),
-    (3, "Clementine Bauch")
+    (3, "Clementine Bauch"),
+    (4, "Patricia Lebsack")
     ])
 def test_get_user_name(user_id,expected_name):
     r = requests.get(f"https://jsonplaceholder.typicode.com/users/{user_id}")
